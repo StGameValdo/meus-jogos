@@ -2,8 +2,8 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, orientation=landscape">
-  <title>Game Player Fullscreen</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Game Player</title>
   <style>
     body, html {
       margin: 0;
@@ -35,21 +35,23 @@
     EJS_gameUrl = 'roms/' + gameFile; 
     EJS_pathtodata = 'https://cdn.emulatorjs.org/stable/data/';
     
-    // Força o emulador a tentar iniciar em tela cheia e modo paisagem se suportado
-    EJS_fullScreen = true;
+    // Configurações para iniciar mais rápido e direto
+    EJS_startOnLoad = true; // Tenta iniciar o carregamento automaticamente
+    EJS_color = '#000000';
   </script>
 
   <script src="https://cdn.emulatorjs.org/stable/data/loader.js"></script>
 
   <script>
-    // Força o bloqueio da tela na horizontal (Landscape) no celular assim que carregar
-    window.addEventListener('load', () => {
-      if (screen.orientation && screen.orientation.lock) {
-        screen.orientation.lock('landscape').catch(() => {
-          // Alguns navegadores exigem interação do usuário para bloquear a rotação
-        });
+    // Força a tela deitada (landscape) e tenta abrir em tela cheia no primeiro toque
+    window.addEventListener('click', () => {
+      if (document.documentElement.requestFullscreen) {
+        document.documentElement.requestFullscreen().catch(() => {});
       }
-    });
+      if (screen.orientation && screen.orientation.lock) {
+        screen.orientation.lock('landscape').catch(() => {});
+      }
+    }, { once: true });
   </script>
 </body>
 </html>
