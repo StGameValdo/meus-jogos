@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Game Player</title>
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100%;
+      background-color: #000;
+      overflow: hidden;
+    }
+    #game-container {
+      width: 100vw;
+      height: 100vh;
+    }
+  </style>
+</head>
+<body>
+  <div id="game-container"></div>
+
+  <script type="text/javascript">
+    // Pega os parâmetros passados pela URL (ex: index.html?core=snes&game=mario.sfc)
+    const urlParams = new URLSearchParams(window.location.search);
+    const systemCore = urlParams.get('core') || 'snes'; 
+    const gameFile = urlParams.get('game') || 'mario.sfc'; 
+
+    EJS_player = '#game-container';
+    EJS_core = systemCore; 
+    EJS_gameUrl = 'roms/' + gameFile; 
+    EJS_pathtodata = 'https://cdn.emulatorjs.org/stable/data/';
+  </script>
+
+  <!-- Carrega a biblioteca do emulador direto da CDN -->
+  <script src="https://cdn.emulatorjs.org/stable/data/loader.js"></script>
+</body>
+</html>
