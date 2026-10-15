@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Game Player</title>
+  <title>Game Player Fullscreen</title>
   <style>
     body, html {
       margin: 0;
@@ -16,7 +16,7 @@
     #game-container {
       width: 100vw;
       height: 100vh;
-      position: absolute;
+      position: fixed;
       top: 0;
       left: 0;
     }
@@ -35,23 +35,28 @@
     EJS_gameUrl = 'roms/' + gameFile; 
     EJS_pathtodata = 'https://cdn.emulatorjs.org/stable/data/';
     
-    // Configurações para iniciar mais rápido e direto
-    EJS_startOnLoad = true; // Tenta iniciar o carregamento automaticamente
+    EJS_startOnLoad = true;
     EJS_color = '#000000';
   </script>
 
   <script src="https://cdn.emulatorjs.org/stable/data/loader.js"></script>
 
   <script>
-    // Força a tela deitada (landscape) e tenta abrir em tela cheia no primeiro toque
-    window.addEventListener('click', () => {
-      if (document.documentElement.requestFullscreen) {
-        document.documentElement.requestFullscreen().catch(() => {});
+    // Força a tela cheia e o modo paisagem absoluto no primeiro toque na tela
+    function goFullscreen() {
+      const elem = document.documentElement;
+      if (elem.requestFullscreen) {
+        elem.requestFullscreen().catch(() => {});
+      } else if (elem.webkitRequestFullscreen) { /* Safari / iOS */
+        elem.webkitRequestFullscreen();
       }
       if (screen.orientation && screen.orientation.lock) {
         screen.orientation.lock('landscape').catch(() => {});
       }
-    }, { once: true });
+    }
+
+    window.addEventListener('click', goFullscreen, { once: true });
+    window.addEventListener('touchstart', goFullscreen, { once: true });
   </script>
 </body>
 </html>
