@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Game Player Fullscreen</title>
+  <title>Game Player</title>
   <style>
     body, html {
       margin: 0;
@@ -16,66 +16,14 @@
     #game-container {
       width: 100vw;
       height: 100vh;
-      position: fixed;
-      top: 0;
-      left: 0;
-      display: none; /* Escondido até clicar no botão */
-    }
-    /* Estilo do Botão Gigante Inicial */
-    #start-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: linear-gradient(135deg, #111, #222);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      z-index: 9999;
-      cursor: pointer;
-      font-family: Arial, sans-serif;
-      color: #fff;
-      text-align: center;
-      padding: 20px;
-    }
-    #start-btn {
-      background-color: #e50914;
-      color: white;
-      font-size: 24px;
-      font-weight: bold;
-      padding: 20px 40px;
-      border: none;
-      border-radius: 50px;
-      box-shadow: 0 8px 20px rgba(229, 9, 20, 0.4);
-      cursor: pointer;
-      animation: pulse 1.5s infinite;
-    }
-    @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.05); }
-      100% { transform: scale(1); }
-    }
-    #start-overlay p {
-      margin-top: 20px;
-      font-size: 16px;
-      color: #aaa;
     }
   </style>
 </head>
 <body>
-
-  <!-- Tela com o Botão Inicial para forçar o Fullscreen -->
-  <div id="start-overlay" onclick="launchGame()">
-    <div style="font-size: 50px; margin-bottom: 15px;">🎮</div>
-    <button id="start-btn">JOGAR AGORA</button>
-    <p>Toque para entrar em Tela Cheia</p>
-  </div>
-
   <div id="game-container"></div>
 
   <script type="text/javascript">
+    // Pega os parâmetros passados pela URL (ex: index.html?core=snes&game=mario.sfc)
     const urlParams = new URLSearchParams(window.location.search);
     const systemCore = urlParams.get('core') || 'snes'; 
     const gameFile = urlParams.get('game') || 'mario.sfc'; 
@@ -84,40 +32,9 @@
     EJS_core = systemCore; 
     EJS_gameUrl = 'roms/' + gameFile; 
     EJS_pathtodata = 'https://cdn.emulatorjs.org/stable/data/';
-    EJS_startOnLoad = true;
-    EJS_color = '#000000';
   </script>
 
-  <!-- O script do emulador só carrega de verdade após o clique para poupar dados e travar o fullscreen -->
-  <script>
-    let gameLoaded = false;
-
-    function launchGame() {
-      if (gameLoaded) return;
-      gameLoaded = true;
-
-      // 1. Ativa a Tela Cheia Absoluta
-      const elem = document.documentElement;
-      if (elem.requestFullscreen) {
-        elem.requestFullscreen().catch(() => {});
-      } else if (elem.webkitRequestFullscreen) {
-        elem.webkitRequestFullscreen();
-      }
-
-      // 2. Trava a tela na horizontal (Paisagem)
-      if (screen.orientation && screen.orientation.lock) {
-        screen.orientation.lock('landscape').catch(() => {});
-      }
-
-      // 3. Remove a tela do botão e mostra o jogo
-      document.getElementById('start-overlay').style.display = 'none';
-      document.getElementById('game-container').style.display = 'block';
-
-      // 4. Inicia o script do EmulatorJS
-      const script = document.createElement('script');
-      script.src = 'https://cdn.emulatorjs.org/stable/data/loader.js';
-      document.body.appendChild(script);
-    }
-  </script>
+  <!-- Carrega a biblioteca do emulador direto da CDN -->
+  <script src="https://cdn.emulatorjs.org/stable/data/loader.js"></script>
 </body>
 </html>
